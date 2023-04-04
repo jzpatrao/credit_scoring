@@ -8,6 +8,13 @@ import numpy as np
 import pickle
 import pandas as pd
 from pydantic import BaseModel
+import re
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent
+
+with open(f"{BASE_DIR}/trained_pipeline.pkl", "rb") as f:
+    model = pickle.load(f)
 
 app = FastAPI()
 
@@ -20,28 +27,16 @@ class ClientFeatures(BaseModel):
     EXT_SOURCE_1: float
     EXT_SOURCE_2: float
     EXT_SOURCE_3: float
-        
-with open("model.pkl", "rb") as f:
-    model = pickle.load(f)
 
-
-@app.post('/score')
-async def give_score(data:ClientFeatures):
-    print('TEST SCORE data is :', data)
-    data = data.dict()
+def give_score(data:ClientFeatures):
     df = pd.DataFrame([data.values()], columns=data.keys())
     score = model.predict_proba(df)[0, 1]
     score = round(score,2)
+    print("Test, score is: ", score)
     if score < 0.33:
         status = 'Accepted'
     else:
         status = 'Rejected'
 
     return {"risk_score": score, 'application_status': status}
-
-
-if __name__ == '__main__':
-    uvicorn.run(app, host="127.0. 0.1", port=8080)
-
-# uvicorn app:app --reload
                       

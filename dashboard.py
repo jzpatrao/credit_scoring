@@ -4,17 +4,20 @@ from dash import Input, Output, dcc, html
 import plotly.graph_objs as go
 
 import pickle
+import re
+from pathlib import Path
 import requests
 import numpy as np
 import pandas as pd
 import json
 import shap
+from model.model import give_score
 
-with open("model.pkl", "rb") as f:
-    model = pickle.load(f)
+BASE_DIR = Path(__file__).resolve(strict=True).parent
+
+with open(f"{BASE_DIR}/shap_values_test_set.pkl", "rb") as f:
+    shap_values = pickle.load(f)
     
-with open("shap_values_test_set.pkl", 'rb') as fp:
-    shap_values = pickle.load(fp)
     
 ############################################################################
 # Read test dataset with selected features and client id.
@@ -123,7 +126,7 @@ def filter_df(client_id):
     #call api route and pass data as argument
 ###################################################################################
 # Posting inputs to scoring model api    
-    url = "http://127.0.0.1:8080/score"
+    # url = "http://127.0.0.1:8080/score"
     payload = {
               "NAME_INCOME_TYPE": Output1,
               "NAME_EDUCATION_TYPE": Output2,
@@ -135,11 +138,11 @@ def filter_df(client_id):
               "EXT_SOURCE_3": Output8
             }
 
-    response = requests.post(url=url, json = payload )
+    # response = requests.post(url=url, json = payload )
     
 # Recieving prediction results from model api    
 
-    data_from_api = response.json()
+    data_from_api = give_score(payload)
     print("data_from_api" , data_from_api)
     
     risk_score = data_from_api["risk_score"]
