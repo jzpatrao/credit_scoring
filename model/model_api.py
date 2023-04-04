@@ -25,7 +25,7 @@ with open("model.pkl", "rb") as f:
     model = pickle.load(f)
 
 
-@app.post('/')
+@app.post('/score')
 async def give_score(data:ClientFeatures):
     print('TEST SCORE data is :', data)
     data = data.dict()
