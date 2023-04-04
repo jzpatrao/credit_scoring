@@ -167,4 +167,4 @@ def filter_df(client_id):
 
 
 if __name__ == "__main__":
-    dashboard.run_server(debug=True, port=8880)
+    dashboard.run_server(debug=True, port=8080)
