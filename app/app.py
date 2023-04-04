@@ -35,8 +35,8 @@ with open(f"{BASE_DIR}/shap_values_test_set.pkl", "rb") as f:
 # df['DAYS_EMPLOYED_PERC'] = df['DAYS_EMPLOYED'] / df['DAYS_BIRTH']
 # df.dropna(inplace=True)
 
-
-df = pd.read_csv("./application_test.csv")
+with open(f"{BASE_DIR}/application_test.csv", "rb") as f:
+    df = pd.read_csv(f)
 
 # A function to display SHAP force plot in html
 def force_plot_html(*args):
