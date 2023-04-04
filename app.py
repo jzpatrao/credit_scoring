@@ -6,7 +6,6 @@ import plotly.graph_objs as go
 import pickle
 import re
 from pathlib import Path
-import requests
 import numpy as np
 import pandas as pd
 import json
@@ -48,7 +47,7 @@ def force_plot_html(*args):
                        style={"width": "100%", "height": "600px", "border": 1})
 ############################################################################
 
-dashboard = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
+app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
 
 # Define content elements
 
@@ -68,7 +67,7 @@ client_profile=[dbc.Row(html.Div(title='Income type',id='Income type', children=
                 dbc.Row(html.Div(title='Ext source 2',id='Ext source 2', children=[])),
                 dbc.Row(html.Div(title='Ext source 3',id='Ext source 3', children=[]))]
 # Actual layout
-dashboard.layout = dbc.Container([
+app.layout = dbc.Container([
     html.H1("Credit Scoring",className='text-center mb-4'),
     
     dbc.Row([dbc.Col(select_client,width=12),
@@ -85,7 +84,7 @@ dashboard.layout = dbc.Container([
 
 
 
-@dashboard.callback(
+@app.callback(
     [
         Output(component_id='Income type', component_property='children'),
         Output(component_id='Education type', component_property='children'),
@@ -170,4 +169,4 @@ def filter_df(client_id):
 
 
 if __name__ == "__main__":
-    dashboard.run_server(debug=True, port=8080)
+    app.run_server(debug=True, port=8080)
