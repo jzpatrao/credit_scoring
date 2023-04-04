@@ -123,7 +123,7 @@ def filter_df(client_id):
     #call api route and pass data as argument
 ###################################################################################
 # Posting inputs to scoring model api    
-    url = "http://127.0.0.1:8000/score"
+    url = "http://127.0.0.1:8080/score"
     payload = {
               "NAME_INCOME_TYPE": Output1,
               "NAME_EDUCATION_TYPE": Output2,
