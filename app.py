@@ -16,13 +16,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 with open(f"{BASE_DIR}/shap_values_test_set.pkl", "rb") as f:
     shap_values = pickle.load(f)
-    
-    
-############################################################################
+
+#------------------------------------------------------------------------
 # Read test dataset with selected features and client id.
-# I have saved to processed dataset in a seperate csv file 
+# I have saved processed dataset in a seperate csv file 
 # because the original dataset is too big to push to github.
-# Lines 24 to 36 are the codes used to process dataset.
+# Lines 24 to 37 are the codes used to process dataset.
 # df = pd.read_csv("application_test.csv", usecols=['SK_ID_CURR',
 #                                                   'NAME_INCOME_TYPE',
 #                                                   'NAME_EDUCATION_TYPE',
@@ -34,7 +33,6 @@ with open(f"{BASE_DIR}/shap_values_test_set.pkl", "rb") as f:
 #                                                   'EXT_SOURCE_3'])
 
 # df['DAYS_EMPLOYED_PERC'] = df['DAYS_EMPLOYED'] / df['DAYS_BIRTH']
-
 # df.dropna(inplace=True)
 
 df = pd.read_csv("application_test.csv")
@@ -45,7 +43,7 @@ def force_plot_html(*args):
     shap_html = f"<head>{shap.getjs()}</head><body>{force_plot.html()}</body>"
     return html.Iframe(srcDoc=shap_html,
                        style={"width": "100%", "height": "600px", "border": 1})
-############################################################################
+#-------------------------------------------------------------------------------
 
 app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
 
@@ -120,12 +118,8 @@ def filter_df(client_id):
     Output7 = json.loads(data)['EXT_SOURCE_2'][client_id] 
     Output8 = json.loads(data)['EXT_SOURCE_3'][client_id]
     
-    #print('test log client_id: ', data )
-    
-    #call api route and pass data as argument
-###################################################################################
-# Posting inputs to scoring model api    
-    # url = "http://127.0.0.1:8080/score"
+
+#--------------------------------------------------------------------------------
     payload = {
               "NAME_INCOME_TYPE": Output1,
               "NAME_EDUCATION_TYPE": Output2,
@@ -137,20 +131,14 @@ def filter_df(client_id):
               "EXT_SOURCE_3": Output8
             }
 
-    # response = requests.post(url=url, json = payload )
-    
-# Recieving prediction results from model api    
+ 
 
-    data_from_api = give_score(payload)
-    print("data_from_api" , data_from_api)
-    
-    risk_score = data_from_api["risk_score"]
-    print('PRINT risk_score :', risk_score)
-    
-    status = data_from_api["application_status"]
+    data_from_model = give_score(payload)
+    risk_score = data_from_model["risk_score"]
+    status = data_from_model["application_status"]
 
     print('PRINT status :', status)
-####################################################################################
+#--------------------------------------------------------------------------------------
 # Data visualizations (a gauge chart for result score & a bar plot for shap explainer
     fig_gauge = go.Figure(go.Indicator(domain={'x': [0, 1], 'y': [0, 1]},
                                  value=np.around(risk_score, 2),
