@@ -3,6 +3,7 @@ pandas==1.3.5
 scikit-learn==1.0.2
 pickle4
 gunicorn
+uvicorn
 dash_bootstrap_components==1.4.1
 dash==2.8.1
 shap==0.41.0
