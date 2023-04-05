@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 import plotly.graph_objs as go
-
+import uvicorn
 import pickle
 import re
 from pathlib import Path
@@ -158,4 +158,4 @@ def filter_df(client_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    uvicorn.run(app)
