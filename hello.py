@@ -2,9 +2,9 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-@app.route('/')
+@app.get('/')
 def hello():
-    print("Hello world")
+    return {'message': 'Hello, World'}
 
 if __name__ == "__main__":
     app.run()
