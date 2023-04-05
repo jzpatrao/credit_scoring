@@ -21,6 +21,7 @@ import uvicorn
      
 df = pd.read_csv("application_test.csv")
 
+@app.get('/')
 def print_df():
     return df.head()
 
