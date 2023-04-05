@@ -11,15 +11,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 app = dash.Dash(external_stylesheets=[dbc.themes.FLATLY])
 
-app.layout = dbc.Container([
-    html.H1("Credit Scoring",className='text-center mb-4'),
-    
-    dbc.Row([])
-    
-    dbc.Row([]),
-    ],
-    fluid=True,
-)
+app.layout = dbc.Container([ dbc.Row([]),
+                            dbc.Row([])
+                            ],fluid=True
+                            )
 
 
 if __name__ == "__main__":
