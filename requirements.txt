@@ -1,3 +1,12 @@
 fastapi
 gunicorn
 uvicorn
+dash
+dash_bootstrap_components
+plotly
+pathlib
+pickle
+numpy 
+pandas 
+json
+shap
