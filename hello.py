@@ -10,6 +10,7 @@ import pandas as pd
 import json
 import shap
 import uvicorn
+from fastapi import FastAPI
 
 # BASE_DIR = Path(__file__).resolve(strict=True).parent
 
@@ -20,6 +21,8 @@ import uvicorn
 #     model = pickle.load(f)
      
 df = pd.read_csv("application_test.csv")
+
+app=FastAPI()
 
 @app.get('/')
 def print_df():
