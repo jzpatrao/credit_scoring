@@ -22,11 +22,11 @@ from fastapi import FastAPI
      
 df = pd.read_csv("application_test.csv")
 
-app=FastAPI()
+app = FastAPI()
 
 @app.get('/')
 def print_df():
-    return df.head()
+    return print(df.columns)
 
 # # A function to display SHAP force plot in html
 # def force_plot_html(*args):
@@ -164,4 +164,4 @@ def print_df():
 
 
 if __name__ == "__main__":
-    app.run_server()
+    uvicorn.run(app)
