@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 import json
 import shap
-from model import give_score
+from .model import give_score
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
