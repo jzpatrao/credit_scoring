@@ -105,6 +105,11 @@ def filter_df(client_id):
     
     data = df[df['SK_ID_CURR'] == client_id]
     idx = data.index.values
+   
+    results = get_score(data)
+    risk_score = results["risk_score"]
+    status = results["application_status"]
+
 
     Output1 = html.Div(data['NAME_INCOME_TYPE'])
     Output2 = html.Div(data['NAME_EDUCATION_TYPE'])
