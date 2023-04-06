@@ -1,11 +1,10 @@
-from fastapi import FastAPI
-import uvicorn
+from dash import Dash, dcc, html, Input, Output
+import dash_bootstrap_components as dbc
 
-app = FastAPI()
+app = Dash(external_stylesheets=[dbc.themes.FLATLY])
 
-@app.get('/')
-def hello():
-    return {'message': 'Hello, World'}
+server = app.server
 
-if __name__ == "__main__":
-    uvicorn.run(app)
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
