@@ -33,12 +33,12 @@ select_client = html.Div([
 client_profile = [
 	dbc.Row(html.Div(title='Income type', id='Income type', children=[])),
 	dbc.Row(html.Div(title='Education type',id='Education type', children=[])),
-      dbc.Row(html.Div(title='Region rating client',id='Region rating client', children=[])),
-      dbc.Row(html.Div(title='Days birth',id='Days birth', children=[])),
-      dbc.Row(html.Div(title='Days employed percent',id='Days employed percent', children=[])),
-      dbc.Row(html.Div(title='Ext source 1',id='Ext source 1', children=[])),
-      dbc.Row(html.Div(title='Ext source 2',id='Ext source 2', children=[])),
-      dbc.Row(html.Div(title='Ext source 3',id='Ext source 3', children=[]))
+    dbc.Row(html.Div(title='Region rating client',id='Region rating client', children=[])),
+    dbc.Row(html.Div(title='Days birth',id='Days birth', children=[])),
+    dbc.Row(html.Div(title='Days employed percent',id='Days employed percent', children=[])),
+    dbc.Row(html.Div(title='Ext source 1',id='Ext source 1', children=[])),
+    dbc.Row(html.Div(title='Ext source 2',id='Ext source 2', children=[])),
+    dbc.Row(html.Div(title='Ext source 3',id='Ext source 3', children=[]))
 ]
 
 app.layout = dbc.Container([
