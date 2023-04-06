@@ -78,18 +78,23 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Select Client ID",
-                               style={"background-color": "#1A85FF", "color": "white"}),
+                               style={"background-color": "#1A85FF", "color": "white", "font-weight": "bold"}),
                 select_client,
                 dbc.CardBody(dcc.Graph(id="gauge-chart"))
             ], className='mb-4', style={"height": "100%"}), width=6),
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Client Profile",
-                               style={"background-color": "#1A85FF", "color": "white"}),
+                               style={"background-color": "#1A85FF", "color": "white", "font-weight": "bold"}),
                 client_profile
             ], className='mb-4', style={"height": "100%"}), width=6)
     ], className='text-center', align='stretch'),
-    dbc.Row(dbc.Col(html.Div(id='shap')), align="center", className='mb-4'),
+    dbc.Row([
+        dbc.Col(html.H4("Feature Explainer (SHAP)", className='text-center mb-4'), width=12,
+                style={"padding-top": "20px"}),
+    ]),
+    dbc.Row(dbc.Col(html.Div(id='shap', style={'width': '100%', 'height': '800px'})), align="center", className='mb-4')
 ], fluid=True,)
+
 
 
 @app.callback(
