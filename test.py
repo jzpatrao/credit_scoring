@@ -1,12 +1,27 @@
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 import pandas as pd
+import pickle
+from pathlib import Path
+import shap
+
+BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 app = Dash(external_stylesheets=[dbc.themes.JOURNAL])
 
 server = app.server
 
 df = pd.read_csv("application_test.csv")
+
+with open(f"{BASE_DIR}/shap_values_test_set.pkl", "rb") as f:
+    shap_values = pickle.load(f)
+
+# A function to display SHAP force plot in html
+def force_plot_html(*args):
+    force_plot = shap.force_plot(*args, matplotlib=False)
+    shap_html = f"<head>{shap.getjs()}</head><body>{force_plot.html()}</body>"
+    return html.Iframe(srcDoc=shap_html,
+                       style={"width": "100%", "height": "600px", "border": 1})
 #------------------------------------------------------------
 select_client = html.Div([dbc.Label("Client ID"),
                dcc.Dropdown(id="Client ID",options=df['SK_ID_CURR'].values,multi=False,value=100001)]),
@@ -26,7 +41,12 @@ app.layout = dbc.Container([
     dbc.Row([
     dbc.Col(dbc.Card(select_client),width=6),
     dbc.Col(dbc.Card(client_profile),width=6)],
-    className='text-center mb-4')
+    className='text-center mb-4'),
+    dbc.Row([
+             dbc.Row(html.Div(id='shap'))
+           ],
+            align="center",
+        ),
     ],fluid=True,
 )
 
@@ -42,12 +62,14 @@ app.layout = dbc.Container([
         Output(component_id='Ext source 1', component_property='children'),
         Output(component_id='Ext source 2', component_property='children'),
         Output(component_id='Ext source 3', component_property='children'),
+        Output("shap", "children")
     ],
     [Input(component_id='Client ID', component_property='value')]
 )
 def filter_df(client_id):
     
     data = df[df['SK_ID_CURR'] == client_id]
+    idx=data.index.values
 
     Output1 = data['NAME_INCOME_TYPE']
     Output2 = data['NAME_EDUCATION_TYPE']
@@ -58,7 +80,9 @@ def filter_df(client_id):
     Output7 = data['EXT_SOURCE_2']
     Output8 = data['EXT_SOURCE_3']
 
-    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8
+    shap_html = force_plot_html(shap_values[idx])
+
+    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8,shap_html
 
 if __name__ == '__main__':
     app.run_server(debug=True)
