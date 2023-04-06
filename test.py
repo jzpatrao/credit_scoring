@@ -4,6 +4,7 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import shap
+from model import get_score
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
