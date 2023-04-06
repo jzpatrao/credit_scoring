@@ -74,7 +74,8 @@ client_profile = html.Div([
 
 
 app.layout = dbc.Container([
-    html.H1("Credit Scoring", className='text-center mb-4'),
+    html.H1("Credit Scoring", className='text-center mb-2'),
+    html.H4("Prêt à dépenser", className='text-center mb-4', style={'padding-bottom': '10px'}),
     dbc.Row([
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Select Client ID",
@@ -92,8 +93,10 @@ app.layout = dbc.Container([
         dbc.Col(html.H4("Feature Explainer (SHAP)", className='text-center mb-4'), width=12,
                 style={"padding-top": "20px"}),
     ]),
-    dbc.Row(dbc.Col(html.Div(id='shap', style={'width': '100%', 'height': '800px'})), align="center", className='mb-4')
+    dbc.Row(dbc.Col(html.Div(id='shap', 
+                             style={'width': '100%', 'height': '800px'})), align="center", className='mb-4')
 ], fluid=True,)
+
 
 
 
