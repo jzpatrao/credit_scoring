@@ -8,10 +8,10 @@ server = app.server
 
 df = pd.read_csv("application_test.csv")
 #------------------------------------------------------------
-select_client = dbc.Card(
-    [html.Div([dbc.Label("Client ID"),
+select_client = html.Div([dbc.Label("Client ID"),
                dcc.Dropdown(id="Client ID",options=df['SK_ID_CURR'].values,multi=False,value=100001)]),
-    ],body=True)
+    
+
 client_profile=[dbc.Row(html.Div(title='Income type',id='Income type', children=[])),
                 dbc.Row(html.Div(title='Education type',id='Education type', children=[])),
                 dbc.Row(html.Div(title='Region rating client',id='Region rating client', children=[])),
@@ -24,12 +24,12 @@ client_profile=[dbc.Row(html.Div(title='Income type',id='Income type', children=
 app.layout = dbc.Container([
     html.H1("Credit Scoring",className='text-center mb-4'),
     dbc.Row([
-    dbc.Col(select_client,width=12),
-    dbc.Col(client_profile,width=12)],
-    className='text-center mb-4'),
-    ],
-    fluid=True,
+    dbc.Col(dbc.Card(select_client),width=6),
+    dbc.Col(dbc.Card(client_profile),width=6)],
+    className='text-center mb-4')
+    ],fluid=True,
 )
+
 @app.callback(
     [
         Output(component_id='Income type', component_property='children'),
