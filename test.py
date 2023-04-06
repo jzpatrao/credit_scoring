@@ -30,7 +30,35 @@ app.layout = dbc.Container([
     ],
     fluid=True,
 )
+@app.callback(
+    [
+        Output(component_id='Income type', component_property='children'),
+        Output(component_id='Education type', component_property='children'),
+        Output(component_id='Region rating client',
+               component_property='children'),
+        Output(component_id='Days birth', component_property='children'),
+        Output(component_id='Days employed percent',
+               component_property='children'),
+        Output(component_id='Ext source 1', component_property='children'),
+        Output(component_id='Ext source 2', component_property='children'),
+        Output(component_id='Ext source 3', component_property='children'),
+    ],
+    [Input(component_id='Client ID', component_property='value')]
+)
+def filter_df(client_id):
+    
+    data = df[df['SK_ID_CURR'] == client_id]
 
+    Output1 = data['NAME_INCOME_TYPE']
+    Output2 = data['NAME_EDUCATION_TYPE']
+    Output3 = data['REGION_RATING_CLIENT']
+    Output4 = data['DAYS_BIRTH']
+    Output5 = data['DAYS_EMPLOYED_PERC']
+    Output6 = data['EXT_SOURCE_1']
+    Output7 = data['EXT_SOURCE_2']
+    Output8 = data['EXT_SOURCE_3']
+
+    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8
 
 if __name__ == '__main__':
     app.run_server(debug=True)
