@@ -1,11 +1,7 @@
-from fastapi import FastAPI
 import numpy as np
 import pickle
 import pandas as pd
 from pydantic import BaseModel
-
-app = FastAPI()
-
 class ClientFeatures(BaseModel):
     NAME_INCOME_TYPE: str
     NAME_EDUCATION_TYPE: str
@@ -19,8 +15,6 @@ class ClientFeatures(BaseModel):
 with open("trained_pipeline.pkl", "rb") as f:
     model = pickle.load(f)
 
-
-@app.post('/')
 def get_score(data:ClientFeatures):
     print('TEST SCORE data is :', data)
     data = data.dict()
