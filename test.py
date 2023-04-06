@@ -4,6 +4,8 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import shap
+import plotly.graph_objs as go
+import numpy as np
 from model import get_score
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
@@ -79,9 +81,8 @@ app.layout = dbc.Container([
         dbc.Col(dbc.Card([dbc.CardHeader("Client Profile"),
                           client_profile]), width=6)
     ],className='text-center mb-4'),
-    dbc.Row([
-        dbc.Col(html.Div(id='shap'), width=12)
-    ], justify="center"),
+    dbc.Row(dbc.Col(dcc.Graph(id="gauge-chart")), align="center"),
+    dbc.Row(dbc.Col(html.Div(id='shap')), align="center"),
 ], fluid=True)
 
 @app.callback(
@@ -96,6 +97,7 @@ app.layout = dbc.Container([
         Output(component_id='Ext source 1', component_property='children'),
         Output(component_id='Ext source 2', component_property='children'),
         Output(component_id='Ext source 3', component_property='children'),
+        Output("gauge-chart", "figure"),
         Output("shap", "children")
     ],
     [Input(component_id='client_id', component_property='value')]
@@ -110,7 +112,6 @@ def filter_df(client_id):
     risk_score = results["risk_score"]
     status = results["application_status"]
 
-
     Output1 = html.Div(data['NAME_INCOME_TYPE'])
     Output2 = html.Div(data['NAME_EDUCATION_TYPE'])
     Output3 = html.Div(data['REGION_RATING_CLIENT'])
@@ -120,9 +121,18 @@ def filter_df(client_id):
     Output7 = html.Div(data['EXT_SOURCE_2'])
     Output8 = html.Div(data['EXT_SOURCE_3'])
 
+    fig_gauge = go.Figure(go.Indicator(domain={'x': [0, 1], 'y': [0, 1]},
+                                 value=np.around(risk_score, 2),
+                                 mode="gauge+number",
+                                 title={'text': f"{status}", 'font': {'size': 24}},
+                                 gauge={'axis': {'range': [0, 1], 'tickwidth': 2, 'tickcolor': "grey"},
+                                        'bar': {'color': "black"},'bordercolor': "black",
+                                        'steps': [{'range': [0, 0.33], 'color': "#1A85FF"}, #using colorblind friendly colors
+                                                  {'range': [0.33, 1], 'color': "#D41159"}],
+                                        'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.33}}))
     shap_html = get_force_plot_html(shap_values[idx])
 
-    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, shap_html
+    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, fig_gauge, shap_html
 
 
 if __name__ == '__main__':

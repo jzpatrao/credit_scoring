@@ -6,7 +6,6 @@ with open("trained_pipeline.pkl", "rb") as f:
     model = pickle.load(f)
 
 def get_score(data):
-
     score = model.predict_proba(data)[0, 1]
     score = round(score,2)
     if score < 0.33:
