@@ -81,16 +81,15 @@ app.layout = dbc.Container([
                                style={"background-color": "#1A85FF", "color": "white"}),
                 select_client,
                 dbc.CardBody(dcc.Graph(id="gauge-chart"))
-            ]), width=6),
+            ], className='mb-4', style={"height": "100%"}), width=6),
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Client Profile",
                                style={"background-color": "#1A85FF", "color": "white"}),
                 client_profile
-            ]), width=6)
-    ], className='text-center mb-4', align='stretch'),
-    dbc.Row(dbc.Col(html.Div(id='shap')), align="center"),
-], fluid=True)
-
+            ], className='mb-4', style={"height": "100%"}), width=6)
+    ], className='text-center', align='stretch'),
+    dbc.Row(dbc.Col(html.Div(id='shap')), align="center", className='mb-4'),
+], fluid=True,)
 
 
 @app.callback(
