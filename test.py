@@ -22,46 +22,65 @@ def get_force_plot_html(*args):
     shap_html = f"<head>{shap.getjs()}</head><body>{force_plot.html()}</body>"
     return html.Iframe(srcDoc=shap_html, style={"width": "100%", "height": "600px", "border": 1})
 
-client_options = df['SK_ID_CURR'].apply(lambda x: {'label': x, 'value': x}).to_list()
+client_options = [{'label': str(x), 'value': x} for x in df['SK_ID_CURR'].unique()]
 
 select_client = html.Div([
-dcc.Dropdown(id="client_id", options=client_options, multi=False, value=100001)
+    dcc.Dropdown(
+        id="client_id",
+        options=client_options,
+        multi=False,
+        value=100001
+    )
 ])
     
 
 client_profile = html.Div([
-	dbc.Row([
-    html.Span("Income type: ", style={"font-weight": "bold"}),
-    html.Div(title='Income type', id='Income type', children=[])]),
-	dbc.Row([html.Span("Education type: ", style={"font-weight": "bold"}),
-          html.Div(title='Education type',id='Education type', children=[])]),
-    dbc.Row([html.Span("Region rating: ", style={"font-weight": "bold"}),
-             html.Div(title='Region rating client',id='Region rating client', children=[])]),
-    dbc.Row([html.Span("Days since birth: ", style={"font-weight": "bold"}),
-             html.Div(title='Days birth',id='Days birth', children=[])]),
-    dbc.Row([html.Span("Employment length: ", style={"font-weight": "bold"}),
-             html.Div(title='Days employed percent',id='Days employed percent', children=[])]),
-    dbc.Row([html.Span("Ext source 1: ", style={"font-weight": "bold"}),
-            html.Div(title='Ext source 1',id='Ext source 1', children=[])]),
-    dbc.Row([html.Span("Ext source 2: ", style={"font-weight": "bold"}),
-            html.Div(title='Ext source 2',id='Ext source 2', children=[])]),
-    dbc.Row([html.Span("Ext source: ", style={"font-weight": "bold"}),
-            html.Div(title='Ext source 3',id='Ext source 3', children=[])])
+    dbc.Row([
+        html.Span("Income type: ", style={"font-weight": "bold"}),
+        html.Div(title='Income type', id='Income type', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Education type: ", style={"font-weight": "bold"}),
+        html.Div(title='Education type', id='Education type', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Region rating: ", style={"font-weight": "bold"}),
+        html.Div(title='Region rating client', id='Region rating client', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Days since birth: ", style={"font-weight": "bold"}),
+        html.Div(title='Days birth', id='Days birth', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Employment length: ", style={"font-weight": "bold"}),
+        html.Div(title='Days employed percent', id='Days employed percent', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Ext source 1: ", style={"font-weight": "bold"}),
+        html.Div(title='Ext source 1', id='Ext source 1', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Ext source 2: ", style={"font-weight": "bold"}),
+        html.Div(title='Ext source 2', id='Ext source 2', children=[])
+    ]),
+    dbc.Row([
+        html.Span("Ext source: ", style={"font-weight": "bold"}),
+        html.Div(title='Ext source 3', id='Ext source 3', children=[])
+    ])
 ])
+
 
 app.layout = dbc.Container([
     html.H1("Credit Scoring", className='text-center mb-4'),
     dbc.Row([
         dbc.Col(dbc.Card([dbc.CardHeader("Select Client ID"),
-                          select_client]),  
-                style={"width": "45%","height": "100%", "display": "inline-block", "vertical-align": "top"},),
+                          select_client]), width=6),
         dbc.Col(dbc.Card([dbc.CardHeader("Client Profile"),
-                          client_profile]),  
-                style={"width": "45%","height": "100%", "display": "inline-block", "vertical-align": "top"},)
-    ], className='text-center mb-4'),
+                          client_profile]), width=6)
+    ],className='text-center mb-4'),
     dbc.Row([
-        dbc.Row(html.Div(id='shap'))
-    ], align="center"),
+        dbc.Col(html.Div(id='shap'), width=12)
+    ], justify="center"),
 ], fluid=True)
 
 @app.callback(
