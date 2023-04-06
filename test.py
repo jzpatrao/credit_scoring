@@ -4,6 +4,7 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import shap
+import plotly
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
