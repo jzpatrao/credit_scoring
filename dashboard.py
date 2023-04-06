@@ -96,7 +96,7 @@ app.layout = dbc.Container([
     ], className='text-center', align='stretch'),
     dbc.Row([
         dbc.Col(html.H4("Feature Explainer (SHAP)", className='text-center mb-4'), width=12,
-                style={"padding-top": "20px"}),
+                style={"padding-top": "10px"}),
     ]),
     dbc.Row(dbc.Col(html.Div(id='shap', 
                              style={'width': '100%', 'height': '800px'})), align="center", className='mb-4')
