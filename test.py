@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import pickle
 from pathlib import Path
-import shap
+import shap2 as shap
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
