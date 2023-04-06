@@ -86,5 +86,4 @@ def filter_df(client_id):
     return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8,shap_html
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8050))
-    app.run_server(debug=True, port=port)
+    app.run_server(debug=True,host='0.0.0.0')
