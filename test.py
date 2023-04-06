@@ -76,14 +76,22 @@ client_profile = html.Div([
 app.layout = dbc.Container([
     html.H1("Credit Scoring", className='text-center mb-4'),
     dbc.Row([
-        dbc.Col(dbc.Card([dbc.CardHeader("Select Client ID"),
-                          select_client]), width=6),
-        dbc.Col(dbc.Card([dbc.CardHeader("Client Profile"),
-                          client_profile]), width=6)
-    ],className='text-center mb-4'),
-    dbc.Row(dbc.Col(dcc.Graph(id="gauge-chart")), align="center"),
+        dbc.Col(dbc.Card([
+                dbc.CardHeader("Select Client ID",
+                               style={"background-color": "#1A85FF", "color": "white"}),
+                select_client,
+                dbc.CardBody(dcc.Graph(id="gauge-chart"))
+            ]), width=6),
+        dbc.Col(dbc.Card([
+                dbc.CardHeader("Client Profile",
+                               style={"background-color": "#1A85FF", "color": "white"}),
+                client_profile
+            ]), width=6)
+    ], className='text-center mb-4', align='stretch'),
     dbc.Row(dbc.Col(html.Div(id='shap')), align="center"),
 ], fluid=True)
+
+
 
 @app.callback(
     [
