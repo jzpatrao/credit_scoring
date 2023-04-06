@@ -8,25 +8,30 @@ import plotly.graph_objs as go
 import numpy as np
 from model import get_score
 
+# Get the base directory of the current file
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
+# Instantiate the dash app
 app = Dash(external_stylesheets=[dbc.themes.JOURNAL])
-
 server = app.server
 
+# Load dataset and saved shap values from pickle
 df = pd.read_csv("application_test.csv")
 
 with open(BASE_DIR.joinpath("shap_values_test_set.pkl"), "rb") as f:
     shap_values = pickle.load(f)
 
+# A function to get SHAP force plot in html format
 def get_force_plot_html(*args):
     """Returns a SHAP force plot as an HTML iframe."""
     force_plot = shap.force_plot(*args, matplotlib=False)
     shap_html = f"<head>{shap.getjs()}</head><body>{force_plot.html()}</body>"
     return html.Iframe(srcDoc=shap_html, style={"width": "100%", "height": "600px", "border": 1})
 
+# Define options for a dropdown box that select a client id.
 client_options = [{'label': str(x), 'value': x} for x in df['SK_ID_CURR'].unique()]
 
+# Drop down box for client selection
 select_client = html.Div([
     dcc.Dropdown(
         id="client_id",
@@ -36,7 +41,7 @@ select_client = html.Div([
     )
 ])
     
-
+# Define client profile in detail
 client_profile = html.Div([
     dbc.Row([
         html.Span("Income type: ", style={"font-weight": "bold"}),
@@ -51,7 +56,7 @@ client_profile = html.Div([
         html.Div(title='Region rating client', id='Region rating client', children=[])
     ]),
     dbc.Row([
-        html.Span("Days since birth: ", style={"font-weight": "bold"}),
+        html.Span("Age: ", style={"font-weight": "bold"}),
         html.Div(title='Days birth', id='Days birth', children=[])
     ]),
     dbc.Row([
@@ -117,6 +122,7 @@ app.layout = dbc.Container([
     ],
     [Input(component_id='client_id', component_property='value')]
 )
+
 def filter_df(client_id):
     """Filters the data based on the selected client ID and returns the income type and SHAP force plot."""
     
@@ -130,11 +136,11 @@ def filter_df(client_id):
     Output1 = html.Div(data['NAME_INCOME_TYPE'])
     Output2 = html.Div(data['NAME_EDUCATION_TYPE'])
     Output3 = html.Div(data['REGION_RATING_CLIENT'])
-    Output4 = html.Div(data['DAYS_BIRTH'])
-    Output5 = html.Div(data['DAYS_EMPLOYED_PERC'])
-    Output6 = html.Div(data['EXT_SOURCE_1'])
-    Output7 = html.Div(data['EXT_SOURCE_2'])
-    Output8 = html.Div(data['EXT_SOURCE_3'])
+    Output4 = html.Div(int(data['DAYS_BIRTH']/365))
+    Output5 = html.Div(round(data['DAYS_EMPLOYED_PERC'],2))
+    Output6 = html.Div(round(data['EXT_SOURCE_1'],2))
+    Output7 = html.Div(round(data['EXT_SOURCE_2'],2))
+    Output8 = html.Div(round(data['EXT_SOURCE_3'],2))
 
     fig_gauge = go.Figure(go.Indicator(domain={'x': [0, 1], 'y': [0, 1]},
                                  value=np.around(risk_score, 2),
@@ -146,9 +152,8 @@ def filter_df(client_id):
                                                   {'range': [0.33, 1], 'color': "#D41159"}],
                                         'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.33}}))
     shap_html = get_force_plot_html(shap_values[idx])
-
+    
     return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, fig_gauge, shap_html
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
