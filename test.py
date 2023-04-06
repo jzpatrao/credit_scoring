@@ -4,7 +4,7 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import shap
-import plotly
+import os
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
@@ -86,4 +86,5 @@ def filter_df(client_id):
     return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8,shap_html
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    port = int(os.environ.get('PORT', 8050))
+    app.run_server(debug=True, port=port)
