@@ -148,8 +148,8 @@ def filter_df(client_id):
                                  title={'text': f"{status}", 'font': {'size': 24}},
                                  gauge={'axis': {'range': [0, 1], 'tickwidth': 2, 'tickcolor': "grey"},
                                         'bar': {'color': "black"},'bordercolor': "black",
-                                        'steps': [{'range': [0, 0.33], 'color': "#1A85FF"}, #using colorblind friendly colors
-                                                  {'range': [0.33, 1], 'color': "#D41159"}],
+                                        'steps': [{'range': [0, 0.5], 'color': "#1A85FF"}, #using colorblind friendly colors
+                                                  {'range': [0.5, 1], 'color': "#D41159"}],
                                         'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.33}}))
     shap_html = get_force_plot_html(shap_values[idx])
     
