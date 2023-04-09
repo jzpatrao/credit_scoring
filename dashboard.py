@@ -150,7 +150,7 @@ def filter_df(client_id):
                                         'bar': {'color': "black"},'bordercolor': "black",
                                         'steps': [{'range': [0, 0.5], 'color': "#1A85FF"}, #using colorblind friendly colors
                                                   {'range': [0.5, 1], 'color': "#D41159"}],
-                                        'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.33}}))
+                                        'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.5}}))
     shap_html = get_force_plot_html(shap_values[idx])
     
     return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, fig_gauge, shap_html
