@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 # Instantiate the dash app
 app = Dash(external_stylesheets=[dbc.themes.JOURNAL])
 server = app.server
+app.title = "Credit Scoring - Prêt à dépenser" 
 
 # Load dataset and saved shap values from pickle
 df = pd.read_csv("application_test.csv")
@@ -104,7 +105,7 @@ app.layout = dbc.Container([
 
 
 
-
+# Define inputs in above layout with callbacks.
 @app.callback(
     [
         Output(component_id='Income type', component_property='children'),
@@ -123,6 +124,7 @@ app.layout = dbc.Container([
     [Input(component_id='client_id', component_property='value')]
 )
 
+# Define values for above callback outputs
 def filter_df(client_id):
     """Filters the data based on the selected client ID and returns the income type and SHAP force plot."""
     
