@@ -1,11 +1,11 @@
 from dash import Dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 import pandas as pd
+import numpy as np
 import pickle
 from pathlib import Path
 import shap
 import plotly.graph_objs as go
-import numpy as np
 from model import get_score
 
 # Get the base directory of the current file
@@ -77,30 +77,30 @@ client_profile = html.Div([
     ])
 ])
 
-
+# Define dashboard layout
 app.layout = dbc.Container([
-    html.H1("Credit Scoring", className='text-center mb-2'),
-    html.H4("Prêt à dépenser", className='text-center mb-4', style={'padding-bottom': '10px'}),
+    html.H1("Credit Scoring", className='text-center mb-2'), # Page title
+    html.H4("Prêt à dépenser", className='text-center mb-4', style={'padding-bottom': '10px'}), # Subtitle
     dbc.Row([
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Select Client ID",
                                style={"background-color": "#1A85FF", "color": "white", "font-weight": "bold"}),
                 select_client,
                 dbc.CardBody(dcc.Graph(id="gauge-chart"))
-            ], className='mb-4', style={"height": "100%"}), width=6),
+            ], className='mb-4', style={"height": "100%"}), width=6), # Card component with a dropdown box and a gauge chart
         dbc.Col(dbc.Card([
                 dbc.CardHeader("Client Profile",
                                style={"background-color": "#1A85FF", "color": "white", "font-weight": "bold"}),
                 client_profile
             ], className='mb-4', style={"height": "100%"}), width=6)
-    ], className='text-center', align='stretch'),
+    ], className='text-center', align='stretch'), # A card components displaying selected client features
     dbc.Row([
         dbc.Col(html.H4("Feature Explainer (SHAP)", className='text-center mb-4'), width=12,
-                style={"padding-top": "10px"}),
+                style={"padding-top": "10px"}), # Title for SHAP plot
     ]),
     dbc.Row(dbc.Col(html.Div(id='shap', 
                              style={'width': '100%', 'height': '800px'})), align="center", className='mb-4')
-], fluid=True,)
+], fluid=True,) # SHAP force plot
 
 
 
