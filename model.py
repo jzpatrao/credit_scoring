@@ -11,7 +11,7 @@ with open("trained_pipeline.pkl", "rb") as f:
 def get_score(data):
     score = model.predict_proba(data)[0, 1]
     score = round(score,2)
-    if score < 0.4966:
+    if score < 0.4933:
         status = 'Accepted'
     else:
         status = 'Rejected'

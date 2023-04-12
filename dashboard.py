@@ -49,8 +49,8 @@ client_profile = html.Div([
         html.Div(title='Income type', id='Income type', children=[])
     ]),
     dbc.Row([
-        html.Span("Education type: ", style={"font-weight": "bold"}),
-        html.Div(title='Education type', id='Education type', children=[])
+        html.Span("Days credit: ", style={"font-weight": "bold"}),
+        html.Div(title='Days credit', id='Days credit', children=[])
     ]),
     dbc.Row([
         html.Span("Region rating: ", style={"font-weight": "bold"}),
@@ -109,7 +109,7 @@ app.layout = dbc.Container([
 @app.callback(
     [
         Output(component_id='Income type', component_property='children'),
-        Output(component_id='Education type', component_property='children'),
+        Output(component_id='Days credit', component_property='children'),
         Output(component_id='Region rating client',
                component_property='children'),
         Output(component_id='Days birth', component_property='children'),
@@ -136,7 +136,7 @@ def filter_df(client_id):
     status = results["application_status"]
 
     Output1 = html.Div(data['NAME_INCOME_TYPE'])
-    Output2 = html.Div(data['NAME_EDUCATION_TYPE'])
+    Output2 = html.Div(data['DAYS_CREDIT'])
     Output3 = html.Div(data['REGION_RATING_CLIENT'])
     Output4 = html.Div(int(data['DAYS_BIRTH']/365))
     Output5 = html.Div(round(data['DAYS_EMPLOYED_PERC'],2))
@@ -150,9 +150,9 @@ def filter_df(client_id):
                                  title={'text': f"{status}", 'font': {'size': 24}},
                                  gauge={'axis': {'range': [0, 1], 'tickwidth': 2, 'tickcolor': "grey"},
                                         'bar': {'color': "black"},'bordercolor': "black",
-                                        'steps': [{'range': [0, 0.4965], 'color': "#1A85FF"}, #using colorblind friendly colors
-                                                  {'range': [0.4965, 1], 'color': "#D41159"}],
-                                        'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.4965}}))
+                                        'steps': [{'range': [0, 0.4933], 'color': "#1A85FF"}, #using colorblind friendly colors
+                                                  {'range': [0.4933, 1], 'color': "#D41159"}],
+                                        'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.4933}}))
     shap_html = get_force_plot_html(shap_values[idx])
     
     return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, fig_gauge, shap_html
