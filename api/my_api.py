@@ -4,6 +4,7 @@ from fastapi import FastAPI
 import uvicorn
 from client_features import ClientFeatures
 import os
+from fastapi.responses import JSONResponse
 
 with open("trained_pipeline.pkl", "rb") as f:
     model = pickle.load(f)
@@ -26,13 +27,14 @@ async def give_score(data:ClientFeatures):
     else:
         status = 'Rejected'
 
-    return {"risk_score": score, 
-            'application_status': status}
+    print(result)
+    return JSONResponse(content=result)
+
 
 # Heroku
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    uvicorn.run(app,host='0.0.0.0', port=port)
+    uvicorn.run("my_api:app", host='0.0.0.0', port=port, reload=True, root_path="/api")
 
 # Local
 # if __name__ == '__main__':
