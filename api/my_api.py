@@ -3,6 +3,7 @@ import pickle
 from fastapi import FastAPI
 import uvicorn
 from client_features import ClientFeatures
+import os
 
 with open("trained_pipeline.pkl", "rb") as f:
     model = pickle.load(f)
@@ -25,9 +26,9 @@ async def give_score(data:ClientFeatures):
     else:
         status = 'Rejected'
 
-    print(score, status)
     return {"risk_score": score, 
             'application_status': status}
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    port = int(os.environ.get('PORT', 5000))
+    uvicorn.run(app,host='0.0.0.0', port=port)
