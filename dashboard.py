@@ -148,8 +148,8 @@ def get_model_prediction(client_id):
     data = df[df['SK_ID_CURR'] == client_id]
     idx = data.index.values
 
-    # url = "http://127.0.0.1:8000/score"
-    url = "https://oc-credit-scoring.herokuapp.com/score"
+    # url = "http://127.0.0.1:8000/score" # Local url
+    url = "https://oc-credit-scoring.herokuapp.com/api/score"
     payload = {
               "NAME_INCOME_TYPE": data['NAME_INCOME_TYPE'].item(),
               "DAYS_CREDIT": data['DAYS_CREDIT'].item(),
