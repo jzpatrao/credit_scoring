@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 # Instantiate the dash app
 app = Dash(external_stylesheets=[dbc.themes.JOURNAL])
-server = app.server
+# server = app.server
 app.title = "Credit Scoring - Prêt à dépenser" 
 
 # Load dataset and saved shap values from pickle
@@ -148,8 +148,7 @@ def get_model_prediction(client_id):
     data = df[df['SK_ID_CURR'] == client_id]
     idx = data.index.values
 
-    # url = "http://127.0.0.1:8000/score" # Local url
-    url = "https://oc-credit-scoring.herokuapp.com/api/score"
+    url = "https://oc-project-7-fastapi.herokuapp.com/score"
     payload = {
               "NAME_INCOME_TYPE": data['NAME_INCOME_TYPE'].item(),
               "DAYS_CREDIT": data['DAYS_CREDIT'].item(),
@@ -160,13 +159,10 @@ def get_model_prediction(client_id):
               "EXT_SOURCE_2": data['EXT_SOURCE_2'].item(),
               "EXT_SOURCE_3": data['EXT_SOURCE_3'].item()
             }
-    print("-"*80, "Payload:\n" ,payload)
 
     response = requests.post(url, json=payload)
 
     data_from_api = response.json()
-
-    print("-"*80, "Response \n", data_from_api)
 
     risk_score = data_from_api["risk_score"]
 
