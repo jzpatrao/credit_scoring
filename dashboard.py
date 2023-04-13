@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent
 
 # Instantiate the dash app
 app = Dash(external_stylesheets=[dbc.themes.JOURNAL])
-# server = app.server
+server = app.server
 app.title = "Credit Scoring - Prêt à dépenser" 
 
 # Load dataset and saved shap values from pickle
@@ -161,8 +161,10 @@ def get_model_prediction(client_id):
             }
 
     response = requests.post(url, json=payload)
+    print('Response: \n', response)
 
     data_from_api = response.json()
+    print("Result: \n", data_from_api)
 
     risk_score = data_from_api["risk_score"]
 
