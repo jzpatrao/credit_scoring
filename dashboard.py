@@ -6,7 +6,8 @@ import pickle
 from pathlib import Path
 import shap
 import plotly.graph_objs as go
-from model import get_score
+import requests
+
 
 # Get the base directory of the current file
 BASE_DIR = Path(__file__).resolve(strict=True).parent
@@ -104,7 +105,6 @@ app.layout = dbc.Container([
 ], fluid=True,) # SHAP force plot
 
 
-
 # Define inputs in above layout with callbacks.
 @app.callback(
     [
@@ -117,23 +117,12 @@ app.layout = dbc.Container([
                component_property='children'),
         Output(component_id='Ext source 1', component_property='children'),
         Output(component_id='Ext source 2', component_property='children'),
-        Output(component_id='Ext source 3', component_property='children'),
-        Output("gauge-chart", "figure"),
-        Output("shap", "children")
+        Output(component_id='Ext source 3', component_property='children')
     ],
     [Input(component_id='client_id', component_property='value')]
 )
-
-# Define values for above callback outputs
-def filter_df(client_id):
-    """Filters the data based on the selected client ID and returns the income type and SHAP force plot."""
-    
+def get_client_features(client_id):
     data = df[df['SK_ID_CURR'] == client_id]
-    idx = data.index.values
-   
-    results = get_score(data)
-    risk_score = results["risk_score"]
-    status = results["application_status"]
 
     Output1 = html.Div(data['NAME_INCOME_TYPE'])
     Output2 = html.Div(data['DAYS_CREDIT'])
@@ -143,6 +132,44 @@ def filter_df(client_id):
     Output6 = html.Div(round(data['EXT_SOURCE_1'],2))
     Output7 = html.Div(round(data['EXT_SOURCE_2'],2))
     Output8 = html.Div(round(data['EXT_SOURCE_3'],2))
+    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8
+
+
+@app.callback(
+    [
+        Output("gauge-chart", "figure"),
+        Output("shap", "children")
+    ],
+    [Input(component_id='client_id', component_property='value')]
+)
+
+# Define values for above callback outputs
+def get_model_prediction(client_id):
+    data = df[df['SK_ID_CURR'] == client_id]
+    idx = data.index.values
+
+    url = "https://oc-credit-scoring.herokuapp.com/predict"
+    payload = {
+              "NAME_INCOME_TYPE": data['NAME_INCOME_TYPE'].item(),
+              "DAYS_CREDIT": data['DAYS_CREDIT'].item(),
+              "DAYS_BIRTH": data['DAYS_BIRTH'].item(),
+              "DAYS_EMPLOYED_PERC": data['DAYS_EMPLOYED_PERC'].item(),
+              "REGION_RATING_CLIENT": data['REGION_RATING_CLIENT'].item(),
+              "EXT_SOURCE_1": data['EXT_SOURCE_1'].item(),
+              "EXT_SOURCE_2": data['EXT_SOURCE_2'].item(),
+              "EXT_SOURCE_3": data['EXT_SOURCE_3'].item()
+            }
+    print("-"*80, "Payload:\n" ,payload)
+
+    response = requests.post(url, json=payload)
+
+    data_from_api = response.json()
+
+    print("-"*80, "Response \n", data_from_api)
+
+    risk_score = data_from_api["risk_score"]
+
+    status = data_from_api["application_status"]
 
     fig_gauge = go.Figure(go.Indicator(domain={'x': [0, 1], 'y': [0, 1]},
                                  value=np.around(risk_score, 2),
@@ -155,7 +182,7 @@ def filter_df(client_id):
                                         'threshold': {'line': {'color': "black", 'width': 1}, 'thickness': 1, 'value': 0.4933}}))
     shap_html = get_force_plot_html(shap_values[idx])
     
-    return Output1, Output2, Output3, Output4, Output5, Output6, Output7, Output8, fig_gauge, shap_html
+    return fig_gauge, shap_html
 
 if __name__ == '__main__':
     app.run_server(debug=True)
